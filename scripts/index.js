@@ -9,56 +9,37 @@ const container = document.querySelector(".places__list");
 // @todo: Функция создания карточки
 const open = document.querySelector(".profile__add-button");
 
-open.addEventListener ('click', function() {
-    const cardsList = document.querySelectorAll('.card__title');
-    let newCard = null;
+open.addEventListener('click', function(){
+    container.append(createCard(initialCards[0], deleteCard));
+})
 
-    initialCards.forEach((initialCard) => {
-        let cardExists = true;
-        cardsList.forEach((card_list_item) => {
-            if (initialCard.name === card_list_item.textContent) {
-                cardExists = false;
-            }
-        })
+function createCard(cardInfo, deleteCallback){
+    let item = template.content.cloneNode(true);
+    item.querySelector(".card__image").src = cardInfo.link;
+    item.querySelector(".card__image").alt = cardInfo.link;
+    item.querySelector(".card__title").textContent = cardInfo.name;
+    
+    const deleteButton = item.querySelector('.card__delete-button');
+    deleteButton.addEventListener('click', function(){
+        item = deleteButton.closest('.places__item');
+        deleteCallback(item);
+    });
+    return item;
+    // container.append(item);
+}
 
-        if (cardExists)
-            newCard = initialCard;
-    })
-
-    if (newCard) {
-    const item = template.content.cloneNode(true);
-    item.querySelector(".card__image").src = newCard.link;
-    item.querySelector(".card__title").textContent = newCard.name;
-    container.append(item);
-    }
-
-    card_delete_listeners();
-
-});
-
-initialCards.forEach((elem) =>{
-    const item = template.content.cloneNode(true);
-    item.querySelector(".card__image").src = elem.link;
-    item.querySelector(".card__title").textContent = elem.name;
-    container.append(item);
-
-});
 
 // @todo: Функция удаления карточки
-function card_delete_listeners(){
-const deleteButtons = document.querySelectorAll('.card__delete-button');
 
-deleteButtons.forEach((deleteButton) =>{
-    deleteButton.addEventListener('click', function() {
-    const listItem = deleteButton.closest('.places__item');
-    listItem.remove();
-})
-})
-}
-card_delete_listeners()
-
+function deleteCard(card) {
+    card.remove()
+ }
 
 
 // @todo: Вывести карточки на страницу
 
+initialCards.forEach((elem) =>{
+    let newCard = createCard(elem, deleteCard);
+    container.append(newCard);
+})
 
