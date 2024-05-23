@@ -14,15 +14,15 @@ open.addEventListener('click', function(){
 })
 
 function createCard(cardInfo, deleteCallback){
-    let item = template.content.cloneNode(true);
+    const item = template.content.cloneNode(true);
     item.querySelector(".card__image").src = cardInfo.link;
     item.querySelector(".card__image").alt = cardInfo.link;
     item.querySelector(".card__title").textContent = cardInfo.name;
     
     const deleteButton = item.querySelector('.card__delete-button');
     deleteButton.addEventListener('click', function(){
-        item = deleteButton.closest('.places__item');   //Перезаписываем item, для этого задаю переменную через let, а не const
-        deleteCallback(item);
+        const cardClose = deleteButton.closest('.places__item');   
+        deleteCallback(cardClose);
     });
     return item;
 
