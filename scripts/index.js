@@ -21,11 +21,11 @@ function createCard(cardInfo, deleteCallback){
     
     const deleteButton = item.querySelector('.card__delete-button');
     deleteButton.addEventListener('click', function(){
-        item = deleteButton.closest('.places__item');
+        item = deleteButton.closest('.places__item');   //Перезаписываем item, для этого задаю переменную через let, а не const
         deleteCallback(item);
     });
     return item;
-    // container.append(item);
+
 }
 
 
