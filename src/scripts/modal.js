@@ -1,6 +1,3 @@
-import { popupEditProfile, popupNewCard, nameInput, jobInput, cardLinkInput, cardNameInput, container } from "../index.js";
-import { createCard } from "./cards.js";
-
 // Функция открытия
 export function openPopup(popup) {
     popup.classList.add('popup_is-opened');
@@ -24,9 +21,6 @@ function handleEscape(evt) {
 
 function handleOverlay(evt) {
     if (evt.currentTarget === evt.target) {
-        const openedPopup = document.querySelector('.popup_is-opened')
-        closePopup(openedPopup);
+        closePopup(evt.currentTarget);
     }
 }
-
-
