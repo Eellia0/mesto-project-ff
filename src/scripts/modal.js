@@ -3,6 +3,13 @@ export function openPopup(popup) {
     popup.classList.add('popup_is-opened');
     document.addEventListener('keydown', handleEscape)
     popup.addEventListener('mousedown', handleOverlay)
+    const formElement = popup.querySelector('.popup__form')
+    if (formElement !== null) {
+    const formInputs = formElement.querySelectorAll('.popup__input')
+    formInputs.forEach((input) => {
+        cleanClassList(formElement, input)
+    })
+}
 }
 
 // Функция закрытия
@@ -24,3 +31,12 @@ function handleOverlay(evt) {
         closePopup(evt.currentTarget);
     }
 }
+
+function cleanClassList(formElement, inputElement) {
+    if (inputElement.classList.contains('popup__input_type_error')) {
+      inputElement.classList.remove('popup__input_type_error');
+      const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+      errorElement.classList.remove('form__input-error_active');
+      errorElement.textContent = '';
+  }
+  }

@@ -7,6 +7,10 @@
   background-size: cover;
   background-position: center;
   margin: 0 29px 0 0;
+  transition: .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media screen and (max-width: 740px) {
@@ -19,4 +23,29 @@
   .profile__image {
     margin-right: 0;
   }
+}
+
+.darken-on-hover {
+  transition: box-shadow 0.3s ease;
+}
+
+.darken-on-hover:hover {
+  box-shadow: inset 0 0 0 100px rgba(0, 0, 0, 0.7);
+}
+
+.edit_image {
+  width: 26px;
+  height: 26px;
+  border: none;
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
+  background-image: url('../../../images/edit-icon.svg');
+}
+
+.profile__image:hover .edit_image{
+  background-image: url('../../../images/edit-icon.svg');
+  background-size: cover;
+  background-position: center;
+  transition: opacity .3s ease-in-out;
+  opacity: 1;
 }
