@@ -2,7 +2,7 @@ import './styles/index.css';
 import './vendor/normalize.css'
 import './scripts/cards.js'
 import { sendAvatarUrl, sendUserInfo, sendCardInfo, getUserInfo, getCards} from './scripts/api.js';
-import { isValidUrl, setEventListeners, formElements } from './scripts/validation.js'
+import { isValidUrl, setEventListeners, formElements, disableSubmitButton } from './scripts/validation.js'
 import { closePopup, openPopup } from './scripts/modal.js';
 import { typeImage, avatar, requireCloser, profileTitle, profileDescription, popupRequire, container, createCard } from './scripts/cards.js';
 
@@ -120,10 +120,10 @@ editCloser.addEventListener('click',() => { closePopup(popupEditProfile)})
 
 requireCloser.addEventListener('click',() => { closePopup(popupRequire)})
 
-avatar.addEventListener('click',() =>  openPopup(editProfileAvatar))
+avatar.addEventListener('click',() =>  openPopup(editProfileAvatar), disableSubmitButton(editProfileAvatar))
 closerEditAvatar.addEventListener('click', () => closePopup(editProfileAvatar))
 
-newCardButtonOpen.addEventListener('click',() => { openPopup(popupNewCard)})
+newCardButtonOpen.addEventListener('click',() => { openPopup(popupNewCard), disableSubmitButton(popupNewCard)})
 newCardButtonCloser.addEventListener('click',() => { closePopup(popupNewCard)})
 typeImageCloser.addEventListener('click', () => {closePopup(typeImage)} )
 

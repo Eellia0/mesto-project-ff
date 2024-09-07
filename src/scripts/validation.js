@@ -39,7 +39,7 @@ const hideInputError = (formElement, inputElement) => {
     errorElement.textContent = '';
 };
 
-const disableSubmitButton = (formElement) => {
+export const disableSubmitButton = (formElement) => {
     const submitButton = formElement.querySelector(validationSettings.submitButtonSelector)
     submitButton.setAttribute('disabled', true);
     submitButton.classList.add(validationSettings.inactiveButtonClass)
@@ -68,6 +68,10 @@ export const setEventListeners = (formElements) => {
     inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', function () {
         isValid(formElement, inputElement);
+        inputList.forEach((input) => {
+          if (input.value === '')
+            disableSubmitButton(formElement)
+        })
       });
     });
   })

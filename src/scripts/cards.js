@@ -52,17 +52,12 @@ export function createCard(cardInfo, ownerId, likes, openImageFunction, userId){
       likesCounter.textContent = Number(likesCounter.textContent) + 1
     }
   })
-
   
   return item;
 }
 
  export function deleteCard(card) {
   card.remove()
-}
-
-function like(button) {
-  button.classList.toggle("card__like-button_is-active");
 }
 
 export function addLike(button, id) {
