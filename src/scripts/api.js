@@ -15,26 +15,16 @@ return Promise.reject(`Ошибка: ${res.status}`)
 
 export const getUserInfo = () => {
   return fetch(config.baseUrl + '/users/me', {
-      headers: {
-        authorization: 'fcf25225-ef51-4080-8b33-8c89c26ff6ce'
-      }
+      headers: config.headers
     })
       .then(getResponse)
-      .catch((err) => {
-        console.log(err)
-      })
 }
 
 export const getCards = () => {
   return fetch(config.baseUrl + '/cards', {
-    headers: {
-      authorization: 'fcf25225-ef51-4080-8b33-8c89c26ff6ce'
-    }
+    headers: config.headers
     })
     .then(getResponse)
-    .catch((err) => {
-      console.log(err)
-    })   
 }
 
 export const sendAvatarUrl = (avatarUrl) => {
@@ -46,9 +36,6 @@ export const sendAvatarUrl = (avatarUrl) => {
     })
   })
   .then(getResponse)
-  .catch((err) => {
-    console.log(err)
-  })
 }
 
 export const sendDeleteCard = (id) => {
@@ -57,9 +44,6 @@ export const sendDeleteCard = (id) => {
       headers: config.headers
   })
   .then(getResponse)
-  .catch((err) => {
-    console.log(err)
-  })
 }
 
 export const sendUserInfo = (userName, userAbout) => { 
@@ -72,9 +56,6 @@ export const sendUserInfo = (userName, userAbout) => {
   })
   })
   .then(getResponse)
-  .catch((err) => {
-    console.log(err)
-  })
 }
 
 export const sendCardInfo = (cardName, cardLink) => {
@@ -87,29 +68,20 @@ export const sendCardInfo = (cardName, cardLink) => {
   })
   }) 
   .then(getResponse)
-  .catch((err) => {
-    console.log(err)
-  })
 }
 
-export const setLike = (cardId) => {
+export const setLikeRequest = (cardId) => {
   return fetch(config.baseUrl + '/cards/likes/' + cardId, {
     method: 'PUT',
     headers: config.headers
   })
   .then(getResponse)
-  .catch((err) => {
-    console.log(err)
-  })
 }
 
-export const unLike = (cardId) => {
+export const unLikeRequest = (cardId) => {
   return fetch(config.baseUrl + '/cards/likes/' + cardId, {
     method: 'DELETE',
     headers: config.headers
   })
   .then(getResponse)
-  .catch((err) => {
-    console.log(err)
-  })
 }
