@@ -1,12 +1,23 @@
 import './styles/index.css';
 import './vendor/normalize.css'
 import './scripts/cards.js'
-import { sendAvatarUrl, sendUserInfo, sendCardInfo, getUserInfo, getCards, setLikeRequest, unLikeRequest} from './scripts/api.js';
-import { isValidUrl, setEventListeners, disableSubmitButton, hideInputError } from './scripts/validation.js'
+import { sendAvatarUrl, sendUserInfo, sendCardInfo, getUserInfo, getCards, setLikeRequest, unLikeRequest, sendDeleteCard } from './scripts/api.js';
+import { clearValidation, enableValidation } from './scripts/validation.js'
 import { closePopup, openPopup } from './scripts/modal.js';
-import { avatar, profileTitle, profileDescription, container, createCard } from './scripts/cards.js';
+import { avatar, profileTitle, profileDescription, container, createCard, deleteCard, editLikesCounter } from './scripts/cards.js';
 
-const formElements = document.forms
+const validationSettings = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'form__input-error_active'
+}
+
+window.addEventListener('load', function () {
+  enableValidation(validationSettings);
+});
 
 const typeImage = document.querySelector('.popup_type_image')
 const image = typeImage.querySelector('.popup__image')
@@ -19,14 +30,11 @@ const popupEditProfile = document.querySelector('.popup_type_edit')
 const editOpener = document.querySelector('.profile__edit-button')
 const editCloser = popupEditProfile.querySelector('.popup__close')
 
-const editProfileSubmitButton = popupEditProfile.querySelector('.popup__button')
-
 const editProfileAvatar = document.querySelector('.popup_type_edit_avatar')
 const closerEditAvatar = editProfileAvatar.querySelector('.popup__close')
 
 const editAvatarForm = document.forms["new-avatar"]
 const avatarURLInput = editAvatarForm.querySelector('.popup__input_type_url')
-const avatarSubmitButton = editAvatarForm.querySelector('.popup__button')
 
 const popupNewCard = document.querySelector('.popup_type_new-card')
 const newCardButtonOpen = document.querySelector('.profile__add-button')
@@ -40,7 +48,6 @@ const jobInput = editProfileForm.querySelector('.popup__input_type_description')
 const placeFormElement = document.forms["new-place"];
 const cardNameInput = placeFormElement.querySelector('.popup__input_type_card-name')
 const cardLinkInput = placeFormElement.querySelector('.popup__input_type_url')
-const newPlaceSubmitButton = placeFormElement.querySelector('.popup__button')
 
 const popups =  document.querySelectorAll('.popup')
 
@@ -136,16 +143,20 @@ editOpener.addEventListener('click',() => {
     nameInput.value = profileTitle.textContent;
     jobInput.value = profileDescription.textContent;
     openPopup(popupEditProfile)
-    hideInputError(editProfileForm, nameInput)
-    hideInputError(editProfileForm, jobInput)
+    clearValidation(editProfileForm, validationSettings)
 })
 
 function forDelete(card, id) {
   openPopup(popupRequire)
   requireSubmit.addEventListener('click', () => {
-  deleteCard(card)
   sendDeleteCard(id)
-  closePopup(popupRequire)
+  .then(() => {
+    closePopup(popupRequire)
+    deleteCard(card)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
 })
 }
 
@@ -154,7 +165,7 @@ function addLike(button, id) {
   .then((res) => {
     button.classList.add('card__like-button_is-active')
     const likesCounter = button.closest('.like_group').querySelector('.like_counter')
-    likesCounter.textContent = res.likes.length
+    editLikesCounter(likesCounter, res.likes.length)
   })
   .catch((err) => {
     console.log(err)
@@ -166,7 +177,7 @@ function removeLike(button, id) {
   .then((res) => {
     button.classList.remove('card__like-button_is-active')
     const likesCounter = button.closest('.like_group').querySelector('.like_counter')
-    likesCounter.textContent = res.likes.length
+    editLikesCounter(likesCounter, res.likes.length)
   })
   .catch((err) => {
     console.log(err)
@@ -178,23 +189,18 @@ editCloser.addEventListener('click',() => { closePopup(popupEditProfile)})
 requireCloser.addEventListener('click',() => { closePopup(popupRequire)})
 
 avatar.addEventListener('click',() => {
-  openPopup(editProfileAvatar), 
-  disableSubmitButton(avatarSubmitButton), 
-  cleanForm(editAvatarForm, avatarURLInput)
+  openPopup(editProfileAvatar),
+  clearValidation(editAvatarForm, validationSettings)
+  avatarURLInput.value = ''
 })
 
-
-function cleanForm(formElement, inputElement) {
-  inputElement.value = ''
-  hideInputError(formElement, inputElement)
-}
 closerEditAvatar.addEventListener('click', () => closePopup(editProfileAvatar))
 
 newCardButtonOpen.addEventListener('click',() => { 
   openPopup(popupNewCard), 
-  disableSubmitButton(newPlaceSubmitButton)
-  cleanForm(placeFormElement, cardNameInput)
-  cleanForm(placeFormElement, cardLinkInput)
+  clearValidation(placeFormElement, validationSettings)
+  cardLinkInput.value = ''
+  cardNameInput.value = ''
 })
 newCardButtonCloser.addEventListener('click',() => { closePopup(popupNewCard)})
 typeImageCloser.addEventListener('click', () => {closePopup(typeImage)} )
@@ -203,6 +209,3 @@ editAvatarForm.addEventListener('submit', submitAvatarForm)
 
 editProfileForm.addEventListener('submit', submitEditForm); 
 placeFormElement.addEventListener('submit', submitCardForm)
-
-setEventListeners(formElements)
-

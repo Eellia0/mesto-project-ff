@@ -21,3 +21,11 @@
   right: 0;
   z-index: 10;
 }
+
+.input-error {
+  font-family: 'Inter' , Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14.52px;
+  text-align: left;
+}

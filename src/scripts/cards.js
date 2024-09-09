@@ -53,6 +53,9 @@ export function createCard(cardInfo, openImageFunction, userId, deleteCallback, 
   card.remove()
 }
 
+export function editLikesCounter(likesCounter, count) {
+  likesCounter.textContent = count
+}
 
 
 
