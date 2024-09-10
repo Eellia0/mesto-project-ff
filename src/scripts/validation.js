@@ -45,6 +45,10 @@ export const setEventListeners = (validationSettings) => {
     inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', function () {
         isValid(formElement, inputElement, submitButton, validationSettings);
+         if (inputList.some(input => {
+          return input.value === ''
+        }))
+        disableSubmitButton(submitButton, validationSettings)
       });
     });
   })

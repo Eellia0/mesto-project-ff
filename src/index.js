@@ -14,10 +14,7 @@ const validationSettings = {
   inputErrorClass: 'popup__input_type_error',
   errorClass: 'form__input-error_active'
 }
-
-window.addEventListener('load', function () {
-  enableValidation(validationSettings);
-});
+enableValidation(validationSettings);
 
 const typeImage = document.querySelector('.popup_type_image')
 const image = typeImage.querySelector('.popup__image')
@@ -55,6 +52,9 @@ const popupRequire = document.querySelector('.popup_type_require')
 const requireCloser = popupRequire.querySelector('.popup__close')
 const requireSubmit = popupRequire.querySelector('.popup__button')
 
+let cardToDelete;
+let cardToDeleteId;
+
 function openImage(cardInfo) {
   image.src = cardInfo.link
   image.alt = cardInfo.name
@@ -67,7 +67,7 @@ Promise.all([getUserInfo(), getCards()])
     userId = userInfo._id
     displayUserInfo(userInfo)
     cardInfos.forEach((cardInfo) => {
-      container.append(createCard(cardInfo, openImage, userId, forDelete, addLike, removeLike))
+      container.append(createCard(cardInfo, openImage, userId, openRequireForm, addLike, removeLike))
     })
 })
 .catch((err) => console.log(err));
@@ -107,8 +107,9 @@ function submitCardForm(evt) {
 
     sendCardInfo(cardNameInput.value, cardLinkInput.value)
     .then((cardInfo) => {
-      container.prepend(createCard(cardInfo, openImage, userId, forDelete, addLike, removeLike))
+      container.prepend(createCard(cardInfo, openImage, userId, openRequireForm, addLike, removeLike))
       closePopup(popupNewCard)
+      evt.target.reset()
     })
     .catch((err) => {
       console.log(err)
@@ -116,7 +117,6 @@ function submitCardForm(evt) {
     .finally(() => {
       submitButton.textContent = "Сохранить";
     })
-    evt.target.reset()
 }
 
 function submitAvatarForm(evt) {
@@ -129,6 +129,7 @@ function submitAvatarForm(evt) {
   .then((res) => {
     avatar.style.backgroundImage = "url('" + res.avatar + "')"
     closePopup(editProfileAvatar)
+    evt.target.reset()
   })
   .catch((err) => {
     console.log(err)
@@ -136,7 +137,7 @@ function submitAvatarForm(evt) {
   .finally(() => {
     submitButton.textContent = "Сохранить";
   })
-  evt.target.reset()
+  
 }
 
 editOpener.addEventListener('click',() => { 
@@ -146,9 +147,17 @@ editOpener.addEventListener('click',() => {
     clearValidation(editProfileForm, validationSettings)
 })
 
+requireSubmit.addEventListener('click', () => {
+  forDelete(cardToDelete, cardToDeleteId);
+})
+
+function openRequireForm(card, cardId){
+openPopup(popupRequire)
+cardToDelete = card;
+cardToDeleteId = cardId;
+}
+
 function forDelete(card, id) {
-  openPopup(popupRequire)
-  requireSubmit.addEventListener('click', () => {
   sendDeleteCard(id)
   .then(() => {
     closePopup(popupRequire)
@@ -157,8 +166,8 @@ function forDelete(card, id) {
   .catch((err) => {
     console.log(err)
   })
-})
 }
+
 
 function addLike(button, id) {
   setLikeRequest(id)

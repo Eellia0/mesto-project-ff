@@ -11,6 +11,8 @@ export function closePopup(popup) {
     popup.classList.remove('popup_is-opened');
     document.removeEventListener('keydown', handleEscape); 
     popup.removeEventListener('mousedown', handleOverlay)
+    // const submitButton = popup.querySelector('.popup__button')
+    //     submitButton.removeEventListener('click', )
 }
 
 function handleEscape(evt) {
