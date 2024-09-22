@@ -2,7 +2,7 @@ import './styles/index.css';
 import './vendor/normalize.css'
 import './scripts/cards.js'
 import { sendAvatarUrl, sendUserInfo, sendCardInfo, getUserInfo, getCards, setLikeRequest, unLikeRequest, sendDeleteCard } from './scripts/api.js';
-import { clearValidation, enableValidation } from './scripts/validation.js'
+import { clearValidation, enableValidation} from './scripts/validation.js'
 import { closePopup, openPopup } from './scripts/modal.js';
 import { avatar, profileTitle, profileDescription, container, createCard, deleteCard, editLikesCounter } from './scripts/cards.js';
 
@@ -104,7 +104,8 @@ function submitCardForm(evt) {
     evt.preventDefault();
 
     const submitButton = placeFormElement.querySelector('.popup__button')
-
+    submitButton.textContent = "Сохранение...";
+    
     sendCardInfo(cardNameInput.value, cardLinkInput.value)
     .then((cardInfo) => {
       container.prepend(createCard(cardInfo, openImage, userId, openRequireForm, addLike, removeLike))
